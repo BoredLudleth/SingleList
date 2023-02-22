@@ -19,10 +19,20 @@ struct elem {
 
 struct spis {
     struct elem* list;
+
     int head;
-    int tail;
-    int free;
     int length;
+    int tail;
+
+    int free;
+
+    int errors;
+};
+
+enum Errors {
+    NO_ERRORS    = 0,
+    INSERT_ERROR = 1,
+    DELETE_ERROR = 2
 };
 
 void list_ctor (struct spis* myList);
@@ -35,7 +45,12 @@ void list_insert_after (struct spis* myList, type value, int index);
 
 void list_insert_last (struct spis* myList, type value);
 
-void list_dump (struct spis myList);
+int list_dump (struct spis myList);
 
 int list_search (struct spis* myList, type value);
+
+int  list_delete_next (struct spis* myList, type index);
+
+int scanf_check (int x);
+
 #endif

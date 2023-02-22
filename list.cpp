@@ -14,7 +14,7 @@ void list_ctor (struct spis* myList) {
     for (int i = 0; i < LIST_LENGTH; i++) {
         myList->list[i].data = POISON;
     }
-
+    
     myList->list[LIST_LENGTH - 1].next = 0;
 }
 
@@ -25,9 +25,11 @@ void list_dtor (struct spis* myList) {
 
     for (int i = 0; i < LIST_LENGTH; i++) {
         myList->list[i].data = POISON;
+        myList->list[i].next = POISON;
     }
 
     free (myList->list);
+    myList->list = nullptr;
 }
 
 void list_insert_first (struct spis* myList, type value) {
@@ -49,8 +51,9 @@ void list_insert_first (struct spis* myList, type value) {
 }
 
 void list_insert_after (struct spis* myList, type value, int index) {
-    if (myList->length < index) {
+    if (myList->length < index || index < 0) {
         printf ("We can't add your value\n");
+        myList->errors = INSERT_ERROR;
         return;
     }
 
@@ -88,7 +91,7 @@ void list_insert_last (struct spis* myList, type value) {
 int list_search (struct spis* myList, type value) {
     int current = myList->head;
 
-    while (current != 0 && myList->length != 0) {
+    while (current > 0 && myList->length != 0) {
         if (myList->list[current].data == value) {
             return current;
         }
@@ -98,8 +101,45 @@ int list_search (struct spis* myList, type value) {
     return -1;
 }
 
-void list_dump (struct spis myList) {
+int  list_delete_next (struct spis* myList, type index) {
+    if (myList->list[index].next == 0 || myList->length < index) {
+        printf("You can't delete unexisting thing(\n");
+        myList->errors = DELETE_ERROR;
+        return 0;
+    }
+
+    int delValue = myList->list[myList->list[index].next].data;
+
+    myList->list[myList->list[index].next].data = POISON;
+    int next_addr = myList->list[myList->list[index].next].next;
+    myList->list[myList->list[index].next].next = myList->free;
+    myList->free = myList->list[index].next;
+    myList->list[index].next = next_addr;
+
+    printf ("DELETED VALUE: %d\n", delValue);
+    return 1;
+
+}
+
+int list_dump (struct spis myList) {
     printf ("==========LIST_DUMP==========\n");
+
+    printf ("ERRORS: %d\n", myList.errors);
+
+    switch (myList.errors) {
+        case NO_ERRORS:
+            printf ("NO PROBLEMS\n");
+            break;
+        case INSERT_ERROR:
+            printf ("INSERT ERROR\n");
+            break;
+        case DELETE_ERROR:
+            printf ("DELETE PROBLEM\n");
+            break;
+        default:
+            printf ("LIST DEFENDER WAS HAHAcked\n");
+            break;
+    };
 
     printf ("length: %d\n", myList.length);
     printf ("head: %d\n", myList.head);
@@ -125,4 +165,17 @@ void list_dump (struct spis myList) {
     }
 
     printf ("end\n=============================\n");
+
+    return myList.errors;
+}
+
+int scanf_check (int x) {
+    if (x == 0) {
+        printf ("Undefined command\n");
+        while (getchar() != '\n');
+
+        return 0;
+    }
+
+    return 1;
 }

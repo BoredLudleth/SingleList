@@ -33,6 +33,12 @@ void list_dtor (struct spis* myList) {
 }
 
 void list_insert_first (struct spis* myList, type value) {
+    if (myList->length > LIST_LENGTH) {
+        printf ("We can't add your value\n");
+        myList->errors = INSERT_ERROR;
+        return;
+    }
+
     int freeElem = -myList->free;
 
     myList->free = myList->list[-myList->free].next;
@@ -51,7 +57,7 @@ void list_insert_first (struct spis* myList, type value) {
 }
 
 void list_insert_after (struct spis* myList, type value, int index) {
-    if (myList->length < index || index < 0) {
+    if (myList->length < index || index < 0 || myList->length > LIST_LENGTH) {
         printf ("We can't add your value\n");
         myList->errors = INSERT_ERROR;
         return;
@@ -70,6 +76,12 @@ void list_insert_after (struct spis* myList, type value, int index) {
 }
 
 void list_insert_last (struct spis* myList, type value) {
+    if (myList->length > LIST_LENGTH) {
+        printf ("We can't add your value\n");
+        myList->errors = INSERT_ERROR;
+        return;
+    }
+    
     int freeElem = -myList->free;
 
     myList->free = myList->list[-myList->free].next;
@@ -102,7 +114,7 @@ int list_search (struct spis* myList, type value) {
 }
 
 int  list_delete_next (struct spis* myList, type index) {
-    if (myList->list[index].next == 0 || myList->length < index) {
+    if (myList->list[index].next == 0 || myList->length < index || myList->length == 0) {
         printf("You can't delete unexisting thing(\n");
         myList->errors = DELETE_ERROR;
         return 0;
@@ -115,6 +127,7 @@ int  list_delete_next (struct spis* myList, type index) {
     myList->list[myList->list[index].next].next = myList->free;
     myList->free = myList->list[index].next;
     myList->list[index].next = next_addr;
+    (myList->length)--;
 
     printf ("DELETED VALUE: %d\n", delValue);
     return 1;

@@ -9,12 +9,12 @@ int main () {
     int index = 0;
 
     list_ctor (&myList); 
-    printf ("henlo, it's menu for queue\n");
+    printf ("henlo, it's menu for list\n");
     printf ("1 num - push first at list\n");
-    printf ("2 num - push last at lis\n");
+    printf ("2 num - push last at list\n");
     printf ("3 num index - push after index in list\n");
     printf ("4 - list dump\n");
-    printf ("5 - list delete next\n");
+    printf ("5 index - list delete next\n");
     printf ("6 - list search\n");
     printf ("7 - menu\n");
     printf ("8 - quit\n");
@@ -73,10 +73,10 @@ int main () {
                 break;
             case 7:
                 printf ("\n1 num - push first at list\n");
-                printf ("2 num - push last at lis\n");
+                printf ("2 num - push last at list\n");
                 printf ("3 num index - push after index in list\n");
                 printf ("4 - list dump\n");
-                printf ("5 - list delete next\n");
+                printf ("5 index - list delete next\n");
                 printf ("6 - list search\n");
                 printf ("7 - menu\n");
                 printf ("8 - quit\n");
@@ -101,4 +101,3 @@ int main () {
 
     return 0;
 }
-// add menu, delete and check
